@@ -1,0 +1,42 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: mongo
+spec: 
+  selector:
+    matchLabels:
+      app: mongo # Label to select the pods managed by this StatefulSet
+  serviceName: mongo # Name of the service to use for this StatefulSet
+  replicas: 3 # Number of replicas for the StatefulSet
+  template:
+    metadata:
+      labels:
+        app: mongo # Label for the pod template
+    spec:
+      containers:
+        - name: mongo
+          image: mongo:4.0.8 # MongoDB image to use
+          args: ["--dbpath", "/data/db"] # Arguments to pass to the MongoDB container
+          env:
+            - name: MONGO_INITDB_ROOT_USERNAME # Environment variable for root username
+              value: "admin" # Default username for MongoDB"
+            - name: MONGO_INITDB_ROOT_PASSWORD # Environment variable for root password
+              value: "password" # Default password for MongoDB
+          command: 
+            - "mongod" # Command to run MongoDB
+            - "--bind_ip_all" # Bind IP address for MongoDB
+            - "--replSet" # Enable replication
+            - "rs0" # Name of the replica set
+          volumeMounts:
+            - name: mongo-volume # Volume mount for MongoDB data
+              mountPath: /data/db # Path inside the container where data is stored
+  volumeClaimsTemplate: # Template for the PersistentVolumeClaim
+    metadata:
+      name: mongo-volume # Name of the PersistentVolumeClaim
+    spec:
+      accessModes: "ReadWriteOnce" # Read and write access for a single node # Access modes for the PersistentVolumeClaim
+      storageClassName: demo-storage # Storage class to use for the PersistentVolumeClaim
+      resources:
+        requests:
+          storage: 1Gi # Amount of storage requested for the PersistentVolumeClaim
+          # The amount of storage requested for the PersistentVolumeClaim

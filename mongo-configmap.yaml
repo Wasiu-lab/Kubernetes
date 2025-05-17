@@ -1,0 +1,14 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: mongo-configmap
+immutable: false # Making the ConfigMap immutable meaning it cannot be changed after creation 
+data:
+  username: "admin"
+  password: "password"
+  # Defining MongoDB configuration file
+  mongodb.conf: |
+    storage:
+      dbPath: /data/configdb
+      replication:
+        replSetName: "rs0"
