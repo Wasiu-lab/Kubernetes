@@ -30,13 +30,16 @@ spec:
           volumeMounts:
             - name: mongo-volume # Volume mount for MongoDB data
               mountPath: /data/db # Path inside the container where data is stored
-  volumeClaimsTemplate: # Template for the PersistentVolumeClaim
-    metadata:
+  volumeClaimTemplates:  # Template for the PersistentVolumeClaim
+  - metadata:
       name: mongo-volume # Name of the PersistentVolumeClaim
     spec:
-      accessModes: "ReadWriteOnce" # Read and write access for a single node # Access modes for the PersistentVolumeClaim
+      accessModes:
+        - ReadWriteOnce   # Read and write access for a single node # Access modes for the PersistentVolumeClaim
       storageClassName: demo-storage # Storage class to use for the PersistentVolumeClaim
       resources:
         requests:
           storage: 1Gi # Amount of storage requested for the PersistentVolumeClaim
-          # The amount of storage requested for the PersistentVolumeClaim
+
+
+
