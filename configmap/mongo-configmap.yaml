@@ -9,6 +9,6 @@ data:
   # Defining MongoDB configuration file
   mongodb.conf: |
     storage:
-      dbPath: /data/configdb
+      dbPath: /data/db
       replication:
         replSetName: "rs0"
