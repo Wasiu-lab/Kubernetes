@@ -3,7 +3,7 @@ kind: Deployment
 metadata:
   name: todo-ui
 spec:
-  replicas: 3
+  replicas: 2
   selector:
     matchLabels:
       app: todo-ui
@@ -13,7 +13,21 @@ spec:
       labels:
         app: todo-ui
     spec:
-      nodeName: minikube-m03
+      # nodeName: minikube-m03
+      # nodeSelector:
+      #   team: enginners
+      affinity:
+        nodeAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            nodeSelectorTerms:
+              - matchExpressions:
+                  - key: rank
+                    operator: Lt 
+                    values:
+                      - "5"
+          preferredDuringSchedulingIgnoredDuringExecution:
+            - preference:
+
       containers:
         - name: todo-ui
           image: pavanelthepu/todo-ui:1.0.2
