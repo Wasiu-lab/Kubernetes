@@ -3,7 +3,7 @@ kind: Deployment
 metadata:
   name: todo-ui
 spec:
-  replicas: 2
+  replicas: 4
   selector:
     matchLabels:
       app: todo-ui
@@ -18,16 +18,26 @@ spec:
       #   team: enginners
       affinity:
         nodeAffinity:
-          requiredDuringSchedulingIgnoredDuringExecution:
-            nodeSelectorTerms:
-              - matchExpressions:
-                  - key: rank
-                    operator: Lt 
-                    values:
-                      - "5"
+          # requiredDuringSchedulingIgnoredDuringExecution:
+          #   nodeSelectorTerms:
+          #     - matchExpressions:
+          #         - key: rank
+          #           operator: Lt 
+          #           values:
+          #             - "5"
           preferredDuringSchedulingIgnoredDuringExecution:
-            - preference:
-
+            - weight: 40
+              preference:
+                matchExpressions:
+                - key: "team"
+                  operator: In
+                  values: ["enginners"]
+            - weight: 60
+              preference:
+                matchExpressions:
+                - key: "rank"
+                  operator: Gt
+                  values: ["4"]
       containers:
         - name: todo-ui
           image: pavanelthepu/todo-ui:1.0.2
